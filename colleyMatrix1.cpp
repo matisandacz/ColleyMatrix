@@ -82,6 +82,12 @@ int main()
 		printMatrix(C, T);
 		printVector(b, T);
 		
+		//Se libera la memoria
+		delete[] b;
+		for (int i = 0; i < T; i++) {
+			delete[] C[i];
+		}
+		delete[] C;
 		//TODO: Triangular la matriz C usando eliminación Gaussiana y resolver el sistema.
 
 	}
