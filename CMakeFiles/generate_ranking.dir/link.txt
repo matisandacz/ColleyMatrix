@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/generate_ranking.dir/generate_ranking.cpp.o  -o generate_ranking Matrix/libMatrix.a 

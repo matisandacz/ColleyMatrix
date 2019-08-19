@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/tdelgado/Desktop/TP MetNum/ColleyMatrix/generate_ranking.cpp
+matrix.h
+/home/tdelgado/Desktop/TP MetNum/ColleyMatrix/matrix.h
+iostream
+-
+vector
+-
+string
+-
+fstream
+-
+
+Matrix/matrix.h
+iostream
+-
+
