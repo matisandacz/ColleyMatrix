@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <iomanip>
 using namespace std;
 
 Matrix colley(int T, vector<vector<int> >& partidos);
@@ -25,14 +26,16 @@ int main(int argc, char** argv) {
 	  int T, P;
 	  inputf >> T >> P;
 
-	  vector<vector<int> > partidos; //equipo0 equipo1 ganador(0 o 1)
+	  vector<vector<int> > partidos; //equipo0 equipo1 puntaje0 puntaje1
 	  vector<int> opcionales;
 	  int opcional, i, goles_i, j, goles_j;
 	  while (inputf >> opcional >> i >> goles_i >> j >> goles_j){
 	    vector<int> nuevo_partido;
 	    nuevo_partido.push_back(i);
 	    nuevo_partido.push_back(j);
-	    nuevo_partido.push_back(goles_i < goles_j);
+	    nuevo_partido.push_back(goles_i);
+	    nuevo_partido.push_back(goles_j);
+
 	    partidos.push_back(nuevo_partido);
 	    opcionales.push_back(opcional);
 	  }
@@ -54,7 +57,7 @@ int main(int argc, char** argv) {
 	  ofstream outputf(argv[3]);
 	  if (outputf.is_open()){
 	    for(int i = 0; i < T; i++)
-	      outputf << ranking(i,0) << "\n";
+	      outputf << fixed << setprecision(15) << ranking(i,0) << "\n";
 	    cout << "Ranking generado con éxito." << endl;
 	  } else {
 	    cout << "No se pudo abrir el archivo de salida." << endl;
@@ -76,9 +79,6 @@ Matrix colley(int T, vector<vector<int> >& partidos){
 
 	//Creamos el vector b
 	Matrix b(T,1);
-	for (int i = 0; i < T; i++) {
-		b(i,0) = 1.0;
-	}
 
 	//Cargamos los partidos
 	for(int k = 0; k < partidos.size(); k++){
@@ -88,14 +88,22 @@ Matrix colley(int T, vector<vector<int> >& partidos){
 		C(j-1,j-1)++;
 		C(i-1,j-1)--;
 		C(j-1,i-1)--;
-		if (i >= j) {
-			b(i,0) += 0.5;
-			b(j,0) -= 0.5;
+
+
+		if (partidos[k][2] > partidos[k][3]) {
+			b(i-1,0) += 1.0;
+			b(j-1,0) -= 1.0;
 		} else {
-			b(i,0) -= 0.5;
-			b(j,0) += 0.5;
+			b(i-1,0) -= 1.0;
+			b(j-1,0) += 1.0;
 		}
 	}
+
+	for (int i = 0; i < T; i++) {
+		b(i,0) /= 2.0;
+		b(i,0) += 1.0;
+	}
+
 	//Guardamos en ranking la solucion del sistema Cx = b obtenida con Eliminacion Gaussiana
 	triangular(C,b);
 	Matrix ranking = resolver_triangulado(C,b);
