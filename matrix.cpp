@@ -55,6 +55,19 @@ void Matrix::print() const {
 	return;
 }
 
+Matrix Matrix::operator*(Matrix& B){
+	//Esta operacion multiplica dos matrices.
+	Matrix C = Matrix(_filas, B.columnas());
+	for(int fila = 0; fila < _filas; fila++){
+		for(int col=0; col < B.columnas(); col++){
+			double producto = 0;
+			for(int aux = 0; aux < _columnas; aux++){
+				producto += (_arreglo[fila*_columnas+aux] * B(aux, col));
+			}
+			C(fila,col) = producto; 
+		}
+	}
+}
 
 Matrix::~Matrix() {
 	delete[] _arreglo;
