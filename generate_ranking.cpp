@@ -112,15 +112,18 @@ Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error){
 
 	if(calcular_error){
 		Matrix bPrima = C*ranking;
-		ofstream outputf("errores.csv");
+		ofstream outputf("error_numerico.csv");
 	  if (outputf.is_open()){
+	  	double epsilon = 0.0;
 	    for(int i = 0; i < T; i++){
-				double error_act = ranking(i,0) - bPrima(i,0);
-				if(error_act < 0)
+				double error_act = b(i,0) - bPrima(i,0);
+				if(error_act < 0) {
 					error_act = -error_act;
-	      outputf << fixed << setprecision(15) << error_act << "\n";
-	    cout << "Errores guardados con éxito." << endl;
+				}
+				epsilon += error_act;
 			}
+		outputf << fixed << setprecision(15) << (epsilon ) << "\n";
+	    cout << "Error de aproximacion guardado con éxito." << endl;
 	  } else {
 	    cout << "No se pudo abrir el archivo de salida de errores." << endl;
 	    exit(0);

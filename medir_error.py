@@ -80,9 +80,9 @@ def correr_competencias():
 
 		for repeticiones in xrange(N_DE_VECES_QUE_EJECUTA):
 			subprocess.call("python generador_competencia.py " + str(n) + " 0.5", shell=True)
-			subprocess.call("./main 0 competencia_generada.in ranking.out", shell=True)
+			subprocess.call("./main 3 competencia_generada.in ranking.out", shell=True)
 
-			temp = open("error.tsv", "r")
+			temp = open("error_numerico.csv", "r")
 			epsilon += float(temp.readline().split()[0])
 			temp.close()
 
