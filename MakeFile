@@ -1,0 +1,13 @@
+.PHONY: all
+
+BIN =  main
+
+all: main
+
+main: generate_ranking.o matrix.o
+	g++ -o  $@  $ˆ
+
+%.o: %.cpp matrix.h
+	g++ -c $<
+
+
