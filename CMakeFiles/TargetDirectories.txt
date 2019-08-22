@@ -1,6 +1,0 @@
-/home/tdelgado/Desktop/TP MetNum/ColleyMatrix/CMakeFiles/rebuild_cache.dir
-/home/tdelgado/Desktop/TP MetNum/ColleyMatrix/CMakeFiles/generate_ranking.dir
-/home/tdelgado/Desktop/TP MetNum/ColleyMatrix/CMakeFiles/edit_cache.dir
-/home/tdelgado/Desktop/TP MetNum/ColleyMatrix/Matrix/CMakeFiles/rebuild_cache.dir
-/home/tdelgado/Desktop/TP MetNum/ColleyMatrix/Matrix/CMakeFiles/Matrix.dir
-/home/tdelgado/Desktop/TP MetNum/ColleyMatrix/Matrix/CMakeFiles/edit_cache.dir
