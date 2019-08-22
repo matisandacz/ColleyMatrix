@@ -4,9 +4,10 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <map>
 using namespace std;
 
-Matrix colley(int T, vector<vector<int> >& partidos);
+Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error);
 
 Matrix wp(int T, vector<vector<int> >& partidos);
 
@@ -43,12 +44,14 @@ int main(int argc, char** argv) {
 	  Matrix ranking;
 
 	  if(argv[1][0] == '0'){
-	    ranking = colley(T,partidos);
+	    ranking = colley(T,partidos,false);
 	  } else if(argv[1][0] == '1'){
 	    ranking = wp(T,partidos);
 	  } else if(argv[1][0] == '2'){
 	    ranking = nuestro_metodo(T,partidos);
-	  } else {
+		} else if(argv[1][0] == '3'){
+			ranking = colley(T,partidos,true);
+		} else {
 	    cout << "Metodo invalido." << endl;
 	    exit(0);
 	  }
@@ -71,7 +74,7 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
-Matrix colley(int T, vector<vector<int> >& partidos){
+Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error){
 	//Creamos la matriz de Colley
 	Matrix C(T,T);
 	for(int k = 0; k < T; k ++)
@@ -88,7 +91,6 @@ Matrix colley(int T, vector<vector<int> >& partidos){
 		C(j-1,j-1)++;
 		C(i-1,j-1)--;
 		C(j-1,i-1)--;
-
 
 		if (partidos[k][2] > partidos[k][3]) {
 			b(i-1,0) += 1.0;
@@ -107,6 +109,23 @@ Matrix colley(int T, vector<vector<int> >& partidos){
 	//Guardamos en ranking la solucion del sistema Cx = b obtenida con Eliminacion Gaussiana
 	triangular(C,b);
 	Matrix ranking = resolver_triangulado(C,b);
+
+	if(calcular_error){
+		Matrix bPrima = C*ranking;
+		ofstream outputf("errores.csv");
+	  if (outputf.is_open()){
+	    for(int i = 0; i < T; i++){
+				double error_act = ranking(i,0) - bPrima(i,0);
+				if(error_act < 0)
+					error_act = -error_act;
+	      outputf << fixed << setprecision(15) << error_act << "\n";
+	    cout << "Errores guardados con éxito." << endl;
+			}
+	  } else {
+	    cout << "No se pudo abrir el archivo de salida de errores." << endl;
+	    exit(0);
+	  }
+	}
 	return ranking;
 }
 
@@ -115,5 +134,6 @@ Matrix wp(int T, vector<vector<int> >& partidos){
 }
 
 Matrix nuestro_metodo(int T, vector<vector<int> >& partidos){
+	map<int,double> puntajes;
 	return Matrix(T,1);
 }
