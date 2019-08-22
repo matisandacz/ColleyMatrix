@@ -72,7 +72,7 @@ def medir_error(archivo_partidos, archivo_ranking, verbose = False) :
 
 
 def correr_competencias():
-	f = open("errores.txt", "w")
+	f = open("errores_en_base_a_n_equipo.txt", "w")
 	for n in xrange(10,100):
 		print n/(100.0-10.0)
 		epsilon = 0.0
@@ -81,8 +81,12 @@ def correr_competencias():
 		for repeticiones in xrange(N_DE_VECES_QUE_EJECUTA):
 			subprocess.call("python generador_competencia.py " + str(n) + " 0.5", shell=True)
 			subprocess.call("./main 0 competencia_generada.in ranking.out", shell=True)
-			epsilon +=  medir_error("competencia_generada.in", "ranking.out")
 
+			temp = open("error.tsv", "r")
+			epsilon += float(temp.readline().split()[0])
+			temp.close()
+
+		
 		epsilon = epsilon/N_DE_VECES_QUE_EJECUTA
 		f.write(str(epsilon)+"\n")
 	f.close()

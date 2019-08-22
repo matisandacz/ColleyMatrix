@@ -4,7 +4,7 @@ import csv
 x = []
 y = []
 
-with open('errores.txt','r') as csvfile:
+with open('errores_en_base_a_n_equipo.txt','r') as csvfile:
     plots = csv.reader(csvfile, delimiter='\n')
     n = 10.0
     for row in plots:
