@@ -122,7 +122,7 @@ Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error){
 				}
 				epsilon += error_act;
 			}
-		outputf << fixed << setprecision(15) << (epsilon ) << "\n";
+		outputf << fixed << setprecision(15) << (epsilon/ ((double)T) ) << "\n";
 	    cout << "Error de aproximacion guardado con éxito." << endl;
 	  } else {
 	    cout << "No se pudo abrir el archivo de salida de errores." << endl;
