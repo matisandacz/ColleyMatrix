@@ -133,7 +133,79 @@ Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error){
 }
 
 Matrix wp(int T, vector<vector<int> >& partidos){
-	return Matrix(T,1);
+	//T es la cantidad de equipos
+
+	//partidos contiene vectores <EQUPO0 EQUIPO1  puntaje0 puntaje1>
+
+	//Creamos un diccionario infoJugadores que dado un equipo i, nos da un vector <#GANADOS, #TOTAL_JUGADOS>
+	map<int, vector<int, int>> infoJugadores;
+	for(int i = 0; i < partidos.size(); i++){
+		int equipo0 =  partidos[i][0] - 1;
+		int equipo1 =  partidos[i][1] - 1;
+		int puntaje0 =  partidos[i][2];
+		int puntaje1 =  partidos[i][3];
+
+		/*CASO GANA EL EQUIPO 0*/
+
+		if(puntaje0 > puntaje1){
+			//Sumamos un ganado al primer equipo
+			if(infoJugadores[equipo0][0] != 0){
+				infoJugadores[equipo0][0]+=1;
+			}else{
+				infoJugadores[equipo0][0] = 1;
+			}
+
+			//Sumamos un partido jugado al primer equipo
+			if(infoJugadores[equipo0][1] != 0){
+				infoJugadores[equipo0][1]+=1;
+			}else{
+				infoJugadores[equipo0][1] = 1;
+			}
+
+			//Sumamos un partido jugado al segundo equipo
+			if(infoJugadores[equipo1][1] != 0){
+				infoJugadores[equipo1][1]+=1;
+			}else{
+				infoJugadores[equipo1][1] = 1;
+			}
+
+			/*CASO GANA EL EQUIPO 1*/
+
+		}else{
+
+			//Sumamos un ganado al segundo equipo
+			if(infoJugadores[equipo1][0] != 0){
+				infoJugadores[equipo1][0]+=1;
+			}else{
+				infoJugadores[equipo1][0] = 1;
+			}
+
+			//Sumamos un partido jugado al primer equipo
+			if(infoJugadores[equipo0][1] != 0){
+				infoJugadores[equipo0][1]+=1;
+			}else{
+				infoJugadores[equipo0][1] = 1;
+			}
+
+			//Sumamos un partido jugado al segundo equipo
+			if(infoJugadores[equipo1][1] != 0){
+				infoJugadores[equipo1][1]+=1;
+			}else{
+				infoJugadores[equipo1][1] = 1;
+			}
+
+		}
+
+	}
+
+	//Creamos la matriz de rankings de acuerdo a #Ganados/#Total_jugados
+	Matrix ranking = Matrix(T,1);
+
+	for (int i = 0; i < T; i++) {
+		ranking(i,0) = infoJugadores[i][0] / infoJugadores[i][1];
+	}
+
+	return ranking;
 }
 
 Matrix nuestro_metodo(int T, vector<vector<int> >& partidos){
