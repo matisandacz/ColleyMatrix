@@ -48,16 +48,18 @@ int main(int argc, char** argv) {
 
 	  if(argv[1][0] == '0'){
 			if(argc == 5)
-	    	ranking = colley(T,partidos,*argv[4]);
+	    	ranking = colley(T,partidos,argv[4][0]);
 			else
 	    	ranking = colley(T,partidos,'0');
 	  } else if(argv[1][0] == '1'){
 	    ranking = wp(T,partidos);
 	  } else if(argv[1][0] == '2'){
 			if(argc == 5)
-	    	ranking = nuestro_metodo(T,partidos,*argv[4]);
-			else
+	    	ranking = nuestro_metodo(T,partidos,argv[4][0]);
+			else{
+				cout<<"Hola";
 				ranking = nuestro_metodo(T,partidos,'0');
+			}
 		} else {
 	    cout << "Metodo invalido." << endl;
 	    exit(0);
@@ -204,10 +206,15 @@ Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, char arg){
 }
 
 double f(int d, int T, char arg){ //si type es true es exponencial y si es false es sigmoidea
-	if(arg == '0')
+	//cout << arg << endl;
+	if(arg == '0'){
+		//cout << "Exponencial" << endl;
 		return exp(d*(log(T)/(double)T)); //no me pregunten por que, fueron los parametros que mas me gustaron
-	else if(arg == '1')
+	} else if(arg == '1'){
+		//cout << "Sigmoidea" << endl;
 		return 1.0/(1.0+exp(-d*(log(T)/(double)T)));
-	else
+	} else {
+		//cout << "Lineal" << endl;
 		return 0.5+(2.0/(double)T)*(double)d;
+	}
 }

@@ -15,7 +15,11 @@ for i in range(1,len(f)):
     for line in f:
         fnew_comp.write(line)
     fnew_comp.close()
-    subprocess.call("./main "+sys.argv[1]+" temp_comp.in temp_ranking.out", shell=True)
+    if len(sys.argv) == 4:
+        subprocess.call("./main "+sys.argv[1]+" temp_comp.in temp_ranking.out "+sys.argv[3], shell=True)
+    else:
+        subprocess.call("./main "+sys.argv[1]+" temp_comp.in temp_ranking.out", shell=True)
+
     fresult = open("temp_ranking.out","r")
     ranking = list(map(float,list(fresult)))
     rank0 = 1 #ranking de los equipos del partido eliminado
