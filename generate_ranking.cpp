@@ -8,17 +8,17 @@
 #include <map>
 using namespace std;
 
-Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error);
+Matrix colley(int T, vector<vector<int> >& partidos, char arg);
 
 Matrix wp(int T, vector<vector<int> >& partidos);
 
-Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, bool type);
+Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, char arg);
 
-double f(int d,int T, bool type); //funcion de asignacion de puntaje de nuestro metodo
+double f(int d,int T, char arg); //funcion de asignacion de puntaje de nuestro metodo
 
 int main(int argc, char** argv) {
-	if(argc != 4){
-	  cout << "Debe ingresar exactamente 3 parametros." << endl;
+	if(argc != 4 && argc != 5){
+	  cout << "Parámetros incorrectos." << endl;
 	  exit(0);
 	}
 	//argv[1] es numero de metodo
@@ -47,13 +47,17 @@ int main(int argc, char** argv) {
 	  Matrix ranking;
 
 	  if(argv[1][0] == '0'){
-	    ranking = colley(T,partidos,false);
+			if(argc == 5)
+	    	ranking = colley(T,partidos,*argv[4]);
+			else
+	    	ranking = colley(T,partidos,'0');
 	  } else if(argv[1][0] == '1'){
 	    ranking = wp(T,partidos);
 	  } else if(argv[1][0] == '2'){
-	    ranking = nuestro_metodo(T,partidos,false);
-		} else if(argv[1][0] == '3'){
-			ranking = colley(T,partidos,true);
+			if(argc == 5)
+	    	ranking = nuestro_metodo(T,partidos,*argv[4]);
+			else
+				ranking = nuestro_metodo(T,partidos,'0');
 		} else {
 	    cout << "Metodo invalido." << endl;
 	    exit(0);
@@ -77,7 +81,7 @@ int main(int argc, char** argv) {
 	return 0;
 }
 
-Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error){
+Matrix colley(int T, vector<vector<int> >& partidos, char arg){
 	//Creamos la matriz de Colley
 	Matrix C(T,T);
 	for(int k = 0; k < T; k ++)
@@ -113,7 +117,7 @@ Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error){
 	triangular(C,b);
 	Matrix ranking = resolver_triangulado(C,b);
 
-	if(calcular_error){
+	if(arg == '1'){
 		Matrix bPrima = C*ranking;
 		ofstream outputf("error_numerico.csv");
 	  if (outputf.is_open()){
@@ -179,7 +183,7 @@ Matrix wp(int T, vector<vector<int> >& partidos){
 	return ranking;
 }
 
-Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, bool type){
+Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, char arg){
 	Matrix tabla(T,1); //puntaje de cada equipo, al principio es 0
 	for(int i = 0; i < partidos.size(); i++){
 		int rank1 = 1;
@@ -189,19 +193,21 @@ Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, bool type){
 			if(tabla(j,0) > tabla(partidos[i][1]-1,0)) rank2++;
 		}
 		if(partidos[i][1] > partidos[i][3]){
-			tabla(partidos[i][0],0) += f(rank1 - rank2, T, false);
-			tabla(partidos[i][2],0) -= f(rank1 - rank2, T, false);
+			tabla(partidos[i][0],0) += f(rank1 - rank2, T, arg);
+			tabla(partidos[i][2],0) -= f(rank1 - rank2, T, arg);
 		} else {
-			tabla(partidos[i][0],0) += f(rank2 - rank1, T, false);
-			tabla(partidos[i][2],0) -= f(rank2 - rank1, T, false);
+			tabla(partidos[i][0],0) += f(rank2 - rank1, T, arg);
+			tabla(partidos[i][2],0) -= f(rank2 - rank1, T, arg);
 		}
 	}
 	return tabla;
 }
 
-double f(int d, int T, bool type){ //si type es true es exponencial y si es false es sigmoidea
-	if(type)
-		return exp(d*(log(T)/T)); //no me pregunten por que, fueron los parametros que mas me gustaron
+double f(int d, int T, char arg){ //si type es true es exponencial y si es false es sigmoidea
+	if(arg == '0')
+		return exp(d*(log(T)/(double)T)); //no me pregunten por que, fueron los parametros que mas me gustaron
+	else if(arg == '1')
+		return 1.0/(1.0+exp(-d*(log(T)/(double)T)));
 	else
-		return 1.0/(1.0+exp(-d*(log(T)/T)));
+		return 0.5+(2.0/(double)T)*(double)d;
 }
