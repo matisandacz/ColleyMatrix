@@ -4,6 +4,7 @@
 #include <string>
 #include <fstream>
 #include <iomanip>
+#include <math.h>
 #include <map>
 using namespace std;
 
@@ -11,7 +12,9 @@ Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error);
 
 Matrix wp(int T, vector<vector<int> >& partidos);
 
-Matrix nuestro_metodo(int T, vector<vector<int> >& partidos);
+Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, bool type);
+
+double f(int d,int T, bool type); //funcion de asignacion de puntaje de nuestro metodo
 
 int main(int argc, char** argv) {
 	if(argc != 4){
@@ -48,7 +51,7 @@ int main(int argc, char** argv) {
 	  } else if(argv[1][0] == '1'){
 	    ranking = wp(T,partidos);
 	  } else if(argv[1][0] == '2'){
-	    ranking = nuestro_metodo(T,partidos);
+	    ranking = nuestro_metodo(T,partidos,false);
 		} else if(argv[1][0] == '3'){
 			ranking = colley(T,partidos,true);
 		} else {
@@ -134,80 +137,72 @@ Matrix colley(int T, vector<vector<int> >& partidos, bool calcular_error){
 
 Matrix wp(int T, vector<vector<int> >& partidos){
 	//T es la cantidad de equipos
-
 	//partidos contiene vectores <EQUPO0 EQUIPO1  puntaje0 puntaje1>
-
 	//Creamos un diccionario infoJugadores que dado un equipo i, nos da un vector <#GANADOS, #TOTAL_JUGADOS>
-	map<int, vector<int, int>> infoJugadores;
+	vector<pair<int,int> > infoJugadores;
+	for(int i = 0; i < T; i++)
+		infoJugadores.push_back(pair<int,int>(0,0)); //al principio nadie jugo nada
 	for(int i = 0; i < partidos.size(); i++){
 		int equipo0 =  partidos[i][0] - 1;
 		int equipo1 =  partidos[i][1] - 1;
 		int puntaje0 =  partidos[i][2];
 		int puntaje1 =  partidos[i][3];
-
 		/*CASO GANA EL EQUIPO 0*/
-
 		if(puntaje0 > puntaje1){
 			//Sumamos un ganado al primer equipo
-			if(infoJugadores[equipo0][0] != 0){
-				infoJugadores[equipo0][0]+=1;
-			}else{
-				infoJugadores[equipo0][0] = 1;
-			}
-
+			infoJugadores[equipo0].first +=1;
 			//Sumamos un partido jugado al primer equipo
-			if(infoJugadores[equipo0][1] != 0){
-				infoJugadores[equipo0][1]+=1;
-			}else{
-				infoJugadores[equipo0][1] = 1;
-			}
-
+			infoJugadores[equipo0].second +=1;
 			//Sumamos un partido jugado al segundo equipo
-			if(infoJugadores[equipo1][1] != 0){
-				infoJugadores[equipo1][1]+=1;
-			}else{
-				infoJugadores[equipo1][1] = 1;
-			}
-
-			/*CASO GANA EL EQUIPO 1*/
-
-		}else{
-
-			//Sumamos un ganado al segundo equipo
-			if(infoJugadores[equipo1][0] != 0){
-				infoJugadores[equipo1][0]+=1;
-			}else{
-				infoJugadores[equipo1][0] = 1;
-			}
-
-			//Sumamos un partido jugado al primer equipo
-			if(infoJugadores[equipo0][1] != 0){
-				infoJugadores[equipo0][1]+=1;
-			}else{
-				infoJugadores[equipo0][1] = 1;
-			}
-
-			//Sumamos un partido jugado al segundo equipo
-			if(infoJugadores[equipo1][1] != 0){
-				infoJugadores[equipo1][1]+=1;
-			}else{
-				infoJugadores[equipo1][1] = 1;
-			}
-
+			infoJugadores[equipo1].second +=1;
 		}
-
+			/*CASO GANA EL EQUIPO 1*/
+		else{
+			//Sumamos un ganado al segundo equipo
+			infoJugadores[equipo1].first +=1;
+			//Sumamos un partido jugado al primer equipo
+			infoJugadores[equipo0].second +=1;
+			//Sumamos un partido jugado al segundo equipo
+			infoJugadores[equipo1].second +=1;
+		}
 	}
-
 	//Creamos la matriz de rankings de acuerdo a #Ganados/#Total_jugados
 	Matrix ranking = Matrix(T,1);
 
 	for (int i = 0; i < T; i++) {
-		ranking(i,0) = infoJugadores[i][0] / infoJugadores[i][1];
+		if(infoJugadores[i].second != 0){
+			cout << infoJugadores[i].first << "  " << infoJugadores[i].second << endl;
+			ranking(i,0) = (double)infoJugadores[i].first / (double)infoJugadores[i].second;
+		}else
+			ranking(i,0) = -1; //-1 si no se puede calcular porque todavia no jugo
 	}
 
 	return ranking;
 }
 
-Matrix nuestro_metodo(int T, vector<vector<int> >& partidos){
-	return Matrix(T,1);
+Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, bool type){
+	Matrix tabla(T,1); //puntaje de cada equipo, al principio es 0
+	for(int i = 0; i < partidos.size(); i++){
+		int rank1 = 1;
+		int rank2 = 1;
+		for(int j = 0; j < T; j++){
+			if(tabla(j,0) > tabla(partidos[i][0]-1,0)) rank1++;
+			if(tabla(j,0) > tabla(partidos[i][1]-1,0)) rank2++;
+		}
+		if(partidos[i][2] > partidos[i][3]){
+			tabla(partidos[i][0],0) += f(rank1 - rank2, T, false);
+			tabla(partidos[i][1],0) -= f(rank1 - rank2, T, false);
+		} else {
+			tabla(partidos[i][0],0) += f(rank2 - rank1, T, false);
+			tabla(partidos[i][1],0) -= f(rank2 - rank1, T, false);
+		}
+	}
+	return tabla;
+}
+
+double f(int d, int T, bool type){ //si type es true es exponencial y si es false es sigmoidea
+	if(type)
+		return exp(d*(log(T)/T)); //no me pregunten por que, fueron los parametros que mas me gustaron
+	else
+		return 1.0/(1.0+exp(-d*(log(T)/T)));
 }
