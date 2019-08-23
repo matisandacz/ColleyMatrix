@@ -171,7 +171,6 @@ Matrix wp(int T, vector<vector<int> >& partidos){
 
 	for (int i = 0; i < T; i++) {
 		if(infoJugadores[i].second != 0){
-			cout << infoJugadores[i].first << "  " << infoJugadores[i].second << endl;
 			ranking(i,0) = (double)infoJugadores[i].first / (double)infoJugadores[i].second;
 		}else
 			ranking(i,0) = -1; //-1 si no se puede calcular porque todavia no jugo
@@ -189,12 +188,12 @@ Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, bool type){
 			if(tabla(j,0) > tabla(partidos[i][0]-1,0)) rank1++;
 			if(tabla(j,0) > tabla(partidos[i][1]-1,0)) rank2++;
 		}
-		if(partidos[i][2] > partidos[i][3]){
+		if(partidos[i][1] > partidos[i][3]){
 			tabla(partidos[i][0],0) += f(rank1 - rank2, T, false);
-			tabla(partidos[i][1],0) -= f(rank1 - rank2, T, false);
+			tabla(partidos[i][2],0) -= f(rank1 - rank2, T, false);
 		} else {
 			tabla(partidos[i][0],0) += f(rank2 - rank1, T, false);
-			tabla(partidos[i][1],0) -= f(rank2 - rank1, T, false);
+			tabla(partidos[i][2],0) -= f(rank2 - rank1, T, false);
 		}
 	}
 	return tabla;

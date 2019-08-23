@@ -64,7 +64,7 @@ Matrix Matrix::operator*(Matrix& B){
 			for(int aux = 0; aux < _columnas; aux++){
 				producto += (_arreglo[fila*_columnas+aux] * B(aux, col));
 			}
-			C(fila,col) = producto; 
+			C(fila,col) = producto;
 		}
 	}
 	return C;
