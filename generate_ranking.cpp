@@ -134,6 +134,5 @@ Matrix wp(int T, vector<vector<int> >& partidos){
 }
 
 Matrix nuestro_metodo(int T, vector<vector<int> >& partidos){
-	map<int,double> puntajes;
 	return Matrix(T,1);
 }
