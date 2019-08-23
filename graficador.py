@@ -14,5 +14,5 @@ with open('errores_en_base_a_n_equipo.txt','r') as csvfile:
         n += 1.0
 
 
-plt.plot(x, y, 'b')
+plt.plot(x, y, 'bo')
 plt.show()

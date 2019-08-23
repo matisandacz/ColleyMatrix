@@ -67,6 +67,7 @@ Matrix Matrix::operator*(Matrix& B){
 			C(fila,col) = producto; 
 		}
 	}
+	return C;
 }
 
 Matrix::~Matrix() {
