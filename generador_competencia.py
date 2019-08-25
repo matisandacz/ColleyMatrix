@@ -17,10 +17,8 @@ f = open("competencia_generada.in", "w")
 n_competidores = int(sys.argv[1])
 # esto refiere al porcentaje de los posibles partidos que en realidad se dan
 densidad_matriz = float(sys.argv[2])
-# refiere cuantos pares de equipos no pueden jugar entre si
-n_partidos_bloqueados =  (n_competidores-1.0) * (n_competidores-1.0) * 0.5  * (1.0-densidad_matriz)
-
-partidos_totales = (n_competidores-1.0) * (n_competidores-1.0) * 0.5  * (densidad_matriz)
+# refiere cuantos pares de equipos  pueden jugar entre si
+partidos_totales = (n_competidores) * (n_competidores-1.0) * 0.5  * (densidad_matriz)
 
 
 posibles_partidos = []
