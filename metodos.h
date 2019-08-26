@@ -135,18 +135,15 @@ Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, char arg){
 			if(tabla(j,0) > tabla(partidos[i][0]-1,0)) rank1++;
 			if(tabla(j,0) > tabla(partidos[i][1]-1,0)) rank2++;
 		}
-		if(partidos[i][1] > partidos[i][3]){
-			tabla(partidos[i][0],0) += f(rank1 - rank2, T, arg);
-			tabla(partidos[i][2],0) -= f(rank1 - rank2, T, arg);
+		if(partidos[i][2] > partidos[i][3]){
+			tabla(partidos[i][0]-1,0) += f(rank1 - rank2, T, arg);
+			tabla(partidos[i][1]-1,0) -= f(rank1 - rank2, T, arg);
 		} else {
-			tabla(partidos[i][0],0) += f(rank2 - rank1, T, arg);
-			tabla(partidos[i][2],0) -= f(rank2 - rank1, T, arg);
+			tabla(partidos[i][0]-1,0) += f(rank2 - rank1, T, arg);
+			tabla(partidos[i][1]-1,0) -= f(rank2 - rank1, T, arg);
 		}
 	}
 	return tabla;
 }
-
-
-
 
 #endif

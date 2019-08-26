@@ -11,6 +11,10 @@ n = len(f)
 for i in range(1,len(f)):
     partido_eliminadoStr = f.pop(i)
     partido_eliminado = list(map(int,partido_eliminadoStr.split(" ")))[1:]
+    equipo0 = partido_eliminado[0]-1
+    equipo1 = partido_eliminado[2]-1
+    goles0 = partido_eliminado[1]
+    goles1 = partido_eliminado[2]
     fnew_comp = open("temp_comp.in","w")
     for line in f:
         fnew_comp.write(line)
@@ -24,12 +28,13 @@ for i in range(1,len(f)):
     ranking = list(map(float,list(fresult)))
     rank0 = 1 #ranking de los equipos del partido eliminado
     rank1 = 1
+    print(partido_eliminado)
     for num in ranking:
-        if num > ranking[partido_eliminado[0]-1]:
+        if num > ranking[equipo0]:
             rank0 += 1
-        if num > ranking[partido_eliminado[2]-1]:
+        if num > ranking[equipo1]:
             rank1 += 1
-    if (rank0>=rank1) == (partido_eliminado[1] > partido_eliminado[3]):
+    if (rank0>=rank1) == (goles0 >= goles1):
         success_count += 1
     f.insert(i,partido_eliminadoStr)
     print(success_count,i)

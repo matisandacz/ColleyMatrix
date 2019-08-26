@@ -50,7 +50,6 @@ int main(int argc, char** argv) {
 			if(argc == 5)
 	    	ranking = nuestro_metodo(T,partidos,argv[4][0]);
 			else{
-				cout<<"Hola";
 				ranking = nuestro_metodo(T,partidos,'0');
 			}
 		} else {
@@ -75,4 +74,3 @@ int main(int argc, char** argv) {
 	}
 	return 0;
 }
-

@@ -54,8 +54,8 @@ double promedioSensibilidad(int equipo, int cantEquipos, Matrix (*metodo)(int, v
 	for(int i = 0 ; i < cantEquipos ; i++){
 		if(i != equipo){
 			vector<int> nuevo_partido;
-			nuevo_partido.push_back(equipo);
-			nuevo_partido.push_back( i);
+			nuevo_partido.push_back(equipo); // esto esta mal, equipo no es lo que deberia ser
+			nuevo_partido.push_back( i+1);
 			nuevo_partido.push_back( 1);
 			nuevo_partido.push_back( 0);
 			partidos.push_back(nuevo_partido);
@@ -155,7 +155,7 @@ int main(int argc, char** argv) {
 		      cout << "No se pudo abrir el archivo de salida." << endl;
 		      exit(0);
 	    }
-			
+
 	}
 	else {
 	  cout << "No se pudo abrir el archivo de entrada." << endl;
@@ -163,5 +163,3 @@ int main(int argc, char** argv) {
 	}
 	return 0;
 }
-
-
