@@ -71,16 +71,15 @@ def medir_error(archivo_partidos, archivo_ranking, verbose = False) :
 	return (acumulado/len(ranking_verd))
 
 
-def correr_competencias():
-	f = open("errores_en_base_a_n_equipo.txt", "w")
+def correr_competencias(densidad = 0.5):
+	f = open("datos/errores_en_base_a_n_equipo" + str(densidad) +  ".txt", "w")
 	for n in xrange(10,100):
-		print n/(100.0-10.0)
 		epsilon = 0.0
-		N_DE_VECES_QUE_EJECUTA = 10
+		N_DE_VECES_QUE_EJECUTA = 50
 
 		for repeticiones in xrange(N_DE_VECES_QUE_EJECUTA):
-			subprocess.call("python generador_competencia.py " + str(n) + " 0.5", shell=True)
-			subprocess.call("./main 3 competencia_generada.in ranking.out", shell=True)
+			subprocess.call("python generador_competencia.py " + str(n) + " "+ str(densidad), shell=True)
+			subprocess.call("./main 0 competencia_generada.in ranking.out", shell=True)
 
 			temp = open("error_numerico.csv", "r")
 			epsilon += float(temp.readline().split()[0])
@@ -91,6 +90,21 @@ def correr_competencias():
 		f.write(str(epsilon)+"\n")
 	f.close()
 
-correr_competencias()
+
+
+
+## IMPORTANTE! LOS ERRORES FUERON MULTIPLICADOS POR 100 PARA HACERLOS MAS GRANDES.
+
+den = 0.05
+for x in xrange(20):
+	correr_competencias(den)
+	print "-----------------"
+	print str(den*100) + " completado"
+	print "----------------"
+
+	den += 0.05
+
+
+	
 
 
