@@ -119,7 +119,8 @@ double f(int d, int T, char arg){ //si type es true es exponencial y si es false
 		return exp(d*(log(T)/(double)T)); //no me pregunten por que, fueron los parametros que mas me gustaron
 	} else if(arg == '1'){
 		//cout << "Sigmoidea" << endl;
-		return 1.0/(1.0+exp(-d*(log(T)/(double)T)));
+		//return 1.0/(1.0+exp(-d*(log(T)/(double)T)));
+		return 1.0/(1.0+exp(-d));
 	} else {
 		//cout << "Lineal" << endl;
 		return 0.5+(2.0/(double)T)*(double)d;

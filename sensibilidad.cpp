@@ -29,19 +29,25 @@ int equipoEnPos(const Matrix& rank, int pos){
 
 //funcion que dado un ranking y un equipo, devuelve su posicion en la tabla ordenada
 int posEquipo(const Matrix& rank, int equipo){
+//	double rankEquipo = rank(equipo,0);
+//	vector<double> posiciones;
+//	for(int i = 0; i < rank.filas() ; ++i){
+//		posiciones.push_back(rank(i,0));
+//	}
+//	stable_sort(posiciones.begin(), posiciones.end(), mayor);
+//
+//	int res = 0;
+//	while(posiciones[res] != rankEquipo && res < posiciones.size()){
+//		++res;
+//	}
+	int pos = 1;
 	double rankEquipo = rank(equipo,0);
-	vector<double> posiciones;
 	for(int i = 0; i < rank.filas() ; ++i){
-		posiciones.push_back(rank(i,0));
+		if(rank(i,0)>rankEquipo){
+			pos++;
+		}
 	}
-	stable_sort(posiciones.begin(), posiciones.end(), mayor);
-
-	int res = 0;
-	while(posiciones[res] != rankEquipo && res < posiciones.size()){
-		++res;
-	}
-
-	return res;
+	return pos;
 }
 
 // funcion que dado un equipo, la cantidad de equipos, una función que calcula un ranking, y una secuencia de partidos; determina
@@ -54,7 +60,7 @@ double promedioSensibilidad(int equipo, int cantEquipos, Matrix (*metodo)(int, v
 	for(int i = 0 ; i < cantEquipos ; i++){
 		if(i != equipo){
 			vector<int> nuevo_partido;
-			nuevo_partido.push_back(equipo); // esto esta mal, equipo no es lo que deberia ser
+			nuevo_partido.push_back(equipo+1);
 			nuevo_partido.push_back( i+1);
 			nuevo_partido.push_back( 1);
 			nuevo_partido.push_back( 0);
@@ -65,7 +71,7 @@ double promedioSensibilidad(int equipo, int cantEquipos, Matrix (*metodo)(int, v
 
 			int posNueva = posEquipo(rankNuevo, equipo);
 
-			res += posNueva - posInicial;
+			res += posInicial - posNueva;
 			partidos.pop_back();
 		}
 	}
@@ -74,7 +80,7 @@ double promedioSensibilidad(int equipo, int cantEquipos, Matrix (*metodo)(int, v
 }
 
 int main(int argc, char** argv) {
-	if(argc != 4){
+	if(argc != 4 && ){
 	  cout << "Debe ingresar exactamente 3 parametros." << endl;
 	  exit(0);
 	}
@@ -110,8 +116,8 @@ int main(int argc, char** argv) {
 				int equipoPeor = equipoEnPos(matCol, T);
 
 				promedios[indicePartido][0] = promedioSensibilidad(equipoMejor, T, colley, partidos);
-				promedios[indicePartido][1] = promedioSensibilidad(equipoMejor, T, colley, partidos);
-				promedios[indicePartido][2] = promedioSensibilidad(equipoMejor, T, colley, partidos);
+				promedios[indicePartido][1] = promedioSensibilidad(equipoInter, T, colley, partidos);
+				promedios[indicePartido][2] = promedioSensibilidad(equipoPeor, T, colley, partidos);
 			}
 			else{
 				if(met == '1'){
@@ -121,8 +127,8 @@ int main(int argc, char** argv) {
 					int equipoPeor = equipoEnPos(matWP, T);
 
 					promedios[indicePartido][0] = promedioSensibilidad(equipoMejor, T, wp, partidos);
-					promedios[indicePartido][1] = promedioSensibilidad(equipoMejor, T, wp, partidos);
-					promedios[indicePartido][2] = promedioSensibilidad(equipoMejor, T, wp, partidos);
+					promedios[indicePartido][1] = promedioSensibilidad(equipoInter, T, wp, partidos);
+					promedios[indicePartido][2] = promedioSensibilidad(equipoPeor, T, wp, partidos);
 				}
 				else{
 					if(met == '2'){
@@ -132,8 +138,8 @@ int main(int argc, char** argv) {
 						int equipoPeor = equipoEnPos(matNM, T);
 
 						promedios[indicePartido][0] = promedioSensibilidad(equipoMejor, T, nuestro_metodo, partidos);
-						promedios[indicePartido][1] = promedioSensibilidad(equipoMejor, T, nuestro_metodo, partidos);
-						promedios[indicePartido][2] = promedioSensibilidad(equipoMejor, T, nuestro_metodo, partidos);
+						promedios[indicePartido][1] = promedioSensibilidad(equipoInter, T, nuestro_metodo, partidos);
+						promedios[indicePartido][2] = promedioSensibilidad(equipoPeor, T, nuestro_metodo, partidos);
 					}
 					else{
 						cout << "Metodo no valido" << endl;
@@ -145,9 +151,9 @@ int main(int argc, char** argv) {
 
 		ofstream outputf(argv[3]);
 	    if (outputf.is_open()){
-			for(int i = 0; i < T; i++){
-				outputf << fixed << setprecision(15) << promedios[i][0] << "  -   ";
-				outputf << fixed << setprecision(15) << promedios[i][1] << "  -   ";
+			for(int i = 0; i < P; i++){
+				outputf << fixed << setprecision(15) << promedios[i][0] << " ";
+				outputf << fixed << setprecision(15) << promedios[i][1] << " ";
 				outputf << fixed << setprecision(15) << promedios[i][2] << "\n";
 			}
 			cout << "Ranking generado con éxito." << endl;
