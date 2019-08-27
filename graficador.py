@@ -3,16 +3,38 @@ import csv
 
 x = []
 y = []
+y2 = []
+y3 = []
 
-with open('errores_en_base_a_n_equipo.txt','r') as csvfile:
+
+with open('datos/errores_en_base_a_n_equipo0.1.txt','r') as csvfile:
     plots = csv.reader(csvfile, delimiter='\n')
     n = 10.0
     for row in plots:
-    	print row[0]
         x.append(n)
-        y.append(row[0])
+        y.append(float(row[0])/100.0)
+        n += 1.0
+
+with open('datos/errores_en_base_a_n_equipo0.4.txt','r') as csvfile:
+    plots = csv.reader(csvfile, delimiter='\n')
+    n = 10.0
+    for row in plots:
+        y2.append(float(row[0])/100.0)
         n += 1.0
 
 
-plt.plot(x, y, 'bo')
+with open('datos/errores_en_base_a_n_equipo0.85.txt','r') as csvfile:
+    plots = csv.reader(csvfile, delimiter='\n')
+    n = 10.0
+    for row in plots:
+        y3.append(float(row[0])/100.0)
+        n += 1.0
+
+
+plt.plot(x, y, x, y2 , x ,y3)
+plt.gca().legend(('0.1','0.4','0.85') ,title="densidad")
+plt.xlabel('n de equipos')
+plt.ylabel('||Ax -b||/n')
+plt.grid()
+plt.title("Efecto del numero de equipos en el error en b")
 plt.show()
