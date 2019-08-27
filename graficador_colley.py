@@ -2,7 +2,6 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 # toma como parametro el archivo de los partidos
 # se ejecuta como
 #	 python graficador_colley <mi_archivo>
