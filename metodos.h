@@ -106,7 +106,7 @@ Matrix wp(int T, vector<vector<int> >& partidos, char arg){
 		if(infoJugadores[i].second != 0){
 			ranking(i,0) = (double)infoJugadores[i].first / (double)infoJugadores[i].second;
 		}else
-			ranking(i,0) = -1; //-1 si no se puede calcular porque todavia no jugo
+			ranking(i,0) = -0; //-1 si no se puede calcular porque todavia no jugo
 	}
 
 	return ranking;
