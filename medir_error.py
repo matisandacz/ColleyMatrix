@@ -72,7 +72,7 @@ def medir_error(archivo_partidos, archivo_ranking, verbose = False) :
 
 
 def correr_competencias(densidad = 0.5):
-	f = open("datos/errores_en_base_a_n_equipo" + str(densidad) +  ".txt", "w")
+	f = open("datos/densidad/errores_en_base_a_n_equipo" + str(densidad) +  ".txt", "w")
 	for n in xrange(10,100):
 		epsilon = 0.0
 		N_DE_VECES_QUE_EJECUTA = 50
@@ -92,18 +92,15 @@ def correr_competencias(densidad = 0.5):
 
 
 
+#den = 0.05
+#for x in xrange(20):
+#	correr_competencias(den)
+#	print "-----------------"
+#	print str(den*100) + " completado"
+#	print "----------------"
 
-## IMPORTANTE! LOS ERRORES FUERON MULTIPLICADOS POR 100 PARA HACERLOS MAS GRANDES.
-
-den = 0.05
-for x in xrange(20):
-	correr_competencias(den)
-	print "-----------------"
-	print str(den*100) + " completado"
-	print "----------------"
-
-	den += 0.05
-
+#	den += 0.05
+correr_competencias(1.0)
 
 	
 
