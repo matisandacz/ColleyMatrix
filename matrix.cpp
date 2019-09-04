@@ -1,4 +1,6 @@
 #include "matrix.h"
+#include <fstream>
+#include <iomanip>
 
 Matrix::Matrix() : _filas(0), _columnas(0), _arreglo(NULL) {
 }
@@ -150,11 +152,14 @@ void Fila::swapear(Fila f) {
 	}
 }
 
-void triangular(Matrix &A, Matrix &b) {
+void triangular(Matrix &A, Matrix &b,bool save_aii) {
 	// se realiza triangulacion usando cada uno de las filas como pivote
+	Matrix pivotes(1,A.filas());
 	for (int pivote = 0; pivote < A.filas() - 1; ++pivote)
 	{
 		double aii = A(pivote,pivote);
+		if(save_aii)
+			pivotes(0,pivote) = aii;
 		// si este pivote no sirve para triangular
 		if (aii == 0)
 		{
@@ -186,6 +191,18 @@ void triangular(Matrix &A, Matrix &b) {
 			{
 				A(j,k) += A(pivote,k) * alpha;
 			}
+		}
+	}
+	if(save_aii){
+		pivotes(0,A.filas()-1) = A(A.filas()-1,A.filas()-1);
+		ofstream outputf("pivotes.csv");
+		if (outputf.is_open()){
+			for(int i = 0;i < A.filas(); i++)
+				outputf << fixed << setprecision(15) << pivotes(0,i)<< "\n";
+			cout << "Pivotes guardados con éxito." << endl;
+		} else {
+			cout << "No se pudo abrir el archivo de salida de pivotes." << endl;
+			exit(0);
 		}
 	}
 }

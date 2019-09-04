@@ -10,8 +10,7 @@ h = list(map(int,f[0].split(" ")))
 
 success_count = 0
 n = len(f)
-for i in range(max([len(f)-100,1]),len(f)):
-    #print(success_count,i,n)
+for i in range(1,len(f)):
     partido_eliminadoStr = f.pop(i)
     partido_eliminado = list(map(int,partido_eliminadoStr.split(" ")))[1:]
     equipo0 = partido_eliminado[0]-1

@@ -72,7 +72,7 @@ class Matrix {
 		double* _arreglo; // arreglo de doubles
 };
 
-void triangular(Matrix &A, Matrix &b);
+void triangular(Matrix &A, Matrix &b, bool save_aii);
 Matrix resolver_triangulado(Matrix &A, Matrix &b);
 
 #endif

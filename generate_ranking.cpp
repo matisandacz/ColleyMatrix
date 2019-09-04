@@ -50,7 +50,8 @@ int main(int argc, char** argv) {
 			if(argc == 5)
 	    	ranking = nuestro_metodo(T,partidos,argv[4][0]);
 			else{
-				ranking = nuestro_metodo(T,partidos,'0');
+				cout << "Cantidad de parámetros incorrecta." << endl;
+				exit(0);
 			}
 		} else {
 	    cout << "Metodo invalido." << endl;
@@ -62,7 +63,7 @@ int main(int argc, char** argv) {
 	  if (outputf.is_open()){
 	    for(int i = 0; i < T; i++)
 	      outputf << fixed << setprecision(15) << ranking(i,0) << "\n";
-	    cout << "Ranking generado con éxito." << endl;
+	    //cout << "Ranking generado con éxito." << endl;
 	  } else {
 	    cout << "No se pudo abrir el archivo de salida." << endl;
 	    exit(0);

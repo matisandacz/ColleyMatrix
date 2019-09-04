@@ -10,6 +10,7 @@
 #include <map>
 
 Matrix colley(int T, vector<vector<int> >& partidos, char arg){
+	cout << "Colley" << endl;
 	//Creamos la matriz de Colley
 	Matrix C(T,T);
 	for(int k = 0; k < T; k ++)
@@ -42,7 +43,10 @@ Matrix colley(int T, vector<vector<int> >& partidos, char arg){
 	}
 
 	//Guardamos en ranking la solucion del sistema Cx = b obtenida con Eliminacion Gaussiana
-	triangular(C,b);
+	if(arg=='2') //si es 2 guardamos los pivotes en un archivo
+		triangular(C,b,true);
+	else
+		triangular(C,b,false);
 	Matrix ranking = resolver_triangulado(C,b);
 
 	if(arg == '1'){
@@ -69,6 +73,7 @@ Matrix colley(int T, vector<vector<int> >& partidos, char arg){
 
 //el char arg no hace nada pero es para uniformizar la aridad de los metodos
 Matrix wp(int T, vector<vector<int> >& partidos, char arg){
+	cout << "WP" << endl;
 	//T es la cantidad de equipos
 	//partidos contiene vectores <EQUPO0 EQUIPO1  puntaje0 puntaje1>
 	//Creamos un diccionario infoJugadores que dado un equipo i, nos da un vector <#GANADOS, #TOTAL_JUGADOS>
@@ -112,22 +117,19 @@ Matrix wp(int T, vector<vector<int> >& partidos, char arg){
 	return ranking;
 }
 
-double f(int d, int T, char arg){ //si type es true es exponencial y si es false es sigmoidea
-	//cout << arg << endl;
+double f(int d, int T, char arg){
+	double lambda = log(T)/(double)T;
 	if(arg == '0'){
-		//cout << "Exponencial" << endl;
-		return exp(d*(log(T)/(double)T)); //no me pregunten por que, fueron los parametros que mas me gustaron
+		return exp(d*lambda); //no me pregunten por que, fueron los parametros que mas me gustaron
 	} else if(arg == '1'){
-		//cout << "Sigmoidea" << endl;
-		//return 1.0/(1.0+exp(-d*(log(T)/(double)T)));
-		return 1.0/(1.0+exp(-d));
+		return 1.0/(1.0+exp(-d*lambda));
 	} else {
-		//cout << "Lineal" << endl;
-		return 0.5+(2.0/(double)T)*(double)d;
+		return 0.5+(d/(2*T));
 	}
 }
 
 Matrix nuestro_metodo(int T, vector<vector<int> >& partidos, char arg){
+	cout << "Nuestro " << arg << endl;
 	Matrix tabla(T,1); //puntaje de cada equipo, al principio es 0
 	for(int i = 0; i < partidos.size(); i++){
 		int rank1 = 1;
