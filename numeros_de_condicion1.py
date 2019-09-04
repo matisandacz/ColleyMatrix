@@ -43,23 +43,27 @@ def obtener_numero_de_condicion_1(numero_de_equipos, densidad):
 
 
 def guardar_campo():
-	f = open("datos/n_de_condicion/campo_de_condiciones.txt", "w")
+	f = open("condicion/campo_de_condiciones.txt", "w")
+	f.close()
+
 	densidad = 0.1
 
 	N_DE_EQUIPOS_INICIAL = 10
 	N_DE_EQUIPOS_FINAL = 100
 
-	n = N_DE_EQUIPOS_INICIAL
 	for y in xrange(10):
-		string = ""	
+		f = open("condicion/campo_de_condiciones.txt", "a")
+		string = ""
+		n = N_DE_EQUIPOS_INICIAL
 		while n <= N_DE_EQUIPOS_FINAL:
 			string = string + str(obtener_numero_de_condicion_1(n,densidad)) + " "
-			n += 5
+			print string
+			n += 10
 
 		f.write(string+"\n")
+		f.close()
 		print str(densidad*100.0) + " completado" 
 		densidad += 0.1
-	f.close()
 
 
 guardar_campo()
