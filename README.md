@@ -34,4 +34,6 @@ graficador_colley.py fue utilizado para visualizar matrices con diferentes densi
 
 medir_error.py se puede ejecutar sin parámetros para generar los datos necesarios para el test de matrices ralas y densas
 
-AGREGAR ACA DOCUMENTACION DE JUSTICIA
+justicia.py fue utilizado para generar las posiciones en la tabla de cada uno de los equipos de la competencia. Toma un único parametro que es el archivo de texto en donde se almacenan los rankings generados por alguno de los algoritmos.
+
+python justicia.py ARCHIVO_RANKINGS
