@@ -5,7 +5,7 @@ import numpy as np
 T = int(sys.argv[1])
 N = int(sys.argv[2])
 
-f = open("../competencia_generada.in","w")
+f = open("competencia_generada.in","w")
 
 habilidades = []
 for i in range(T):

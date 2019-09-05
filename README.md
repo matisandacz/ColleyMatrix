@@ -17,5 +17,21 @@ archivo2 es el ranking de salida, donde la i-ésima línea es el puntaje del i-�
 El test de predicción está en prediction_test.py y se puede ejecutar con:
 
 python prediction_test.py COD archivo1 arg
-
+sys
 con la misma semántica de main, aunque arg solo tiene sentido para COD = 0
+
+generador_competencia.py fue utilizado en el test de error para matrices ralas y densas, guarda la competencia en competencia_generada.in porque está pensado para ser llamado por otros scripts. Se puede ejecutar con:
+
+python generador_competencia.py NRO_EQUIPOS DENSIDAD
+
+generador_competencia_pivotes.py fue utilizado en el test del tamaño de los pivotes, también guarda su resultado en competencia_generada.in. Se puede ejecutar con:
+
+python generador_competencia_pivotes.py NRO_EQUIPOS NRO_PARTIDOS
+
+graficador_ralasydensas.py fue utilizado para generar el gráfico presentado en el informe a partir de los datos en la carpeta datos_densidad, no recibe parámetros pero espera que estos archivos estén presentes
+
+graficador_colley.py fue utilizado para visualizar matrices con diferentes densidades, recibe el archivo de la competencia
+
+medir_error.py se puede ejecutar sin parámetros para generar los datos necesarios para el test de matrices ralas y densas
+
+AGREGAR ACA DOCUMENTACION DE JUSTICIA

@@ -29,17 +29,6 @@ int equipoEnPos(const Matrix& rank, int pos){
 
 //funcion que dado un ranking y un equipo, devuelve su posicion en la tabla ordenada
 int posEquipo(const Matrix& rank, int equipo){
-//	double rankEquipo = rank(equipo,0);
-//	vector<double> posiciones;
-//	for(int i = 0; i < rank.filas() ; ++i){
-//		posiciones.push_back(rank(i,0));
-//	}
-//	stable_sort(posiciones.begin(), posiciones.end(), mayor);
-//
-//	int res = 0;
-//	while(posiciones[res] != rankEquipo && res < posiciones.size()){
-//		++res;
-//	}
 	int pos = 1;
 	double rankEquipo = rank(equipo,0);
 	for(int i = 0; i < rank.filas() ; ++i){
@@ -52,35 +41,23 @@ int posEquipo(const Matrix& rank, int equipo){
 
 // funcion que dado un equipo, la cantidad de equipos, una función que calcula un ranking, y una secuencia de partidos; determina
 //		el salto promedio que realizaria dicho equipo en el partido siguiente, si le ganara al resto de los equipos
-double promedioSensibilidad(int equipo, int cantEquipos, Matrix (*metodo)(int, vector<vector<int> >&, char) , vector<vector<int> >& partidos){
-	double res = 0;
-	Matrix rankInicial;
-	rankInicial = metodo(cantEquipos, partidos, '0');
-	int posInicial = posEquipo(rankInicial, equipo);
-	for(int i = 0 ; i < cantEquipos ; i++){
-		if(i != equipo){
-			vector<int> nuevo_partido;
-			nuevo_partido.push_back(equipo+1);
-			nuevo_partido.push_back( i+1);
-			nuevo_partido.push_back( 1);
-			nuevo_partido.push_back( 0);
-			partidos.push_back(nuevo_partido);
-
-			Matrix rankNuevo;
-			rankNuevo = metodo(cantEquipos, partidos, '0');
-
-			int posNueva = posEquipo(rankNuevo, equipo);
-
-			res += posInicial - posNueva;
-			partidos.pop_back();
-		}
+int calcular_ascenso(int equipo, int cantEquipos, Matrix (*metodo)(int, vector<vector<int> >&, char) , vector<vector<int> > partidos){
+	int res = 0;
+	bool esPrimero = cantEquipos == 1;
+	Matrix ranking_actual = metodo(cantEquipos,partidos,'2');
+	while(!esPrimero){
+		int idPrimero = equipoEnPos(ranking_actual,1);
+		vector<int> nuevo = {equipo+1,idPrimero+1,1,0};
+		partidos.push_back(nuevo);
+		ranking_actual = metodo(cantEquipos,partidos,'2');
+		res++;
+		esPrimero = equipoEnPos(ranking_actual, 1) == equipo;
 	}
-
-	return res/(cantEquipos - 1);
+	return res;
 }
 
 int main(int argc, char** argv) {
-	if(argc != 4 && ){
+	if(argc != 4){
 	  cout << "Debe ingresar exactamente 3 parametros." << endl;
 	  exit(0);
 	}
@@ -97,7 +74,7 @@ int main(int argc, char** argv) {
 		vector<vector<int> > partidos; //equipo0 equipo1 puntaje0 puntaje1
 		int opcional, i, goles_i, j, goles_j;
 
-		double promedios[P][3];
+		int cantidades[P];
 		int indicePartido = 0;
 
 		while (inputf >> opcional >> i >> goles_i >> j >> goles_j){
@@ -111,40 +88,18 @@ int main(int argc, char** argv) {
 
 			if(met == '0'){
 				Matrix matCol = colley(T, partidos, '0');
-				int equipoMejor = equipoEnPos(matCol, 1);
-				int equipoInter = equipoEnPos(matCol, T/2);
 				int equipoPeor = equipoEnPos(matCol, T);
-
-				promedios[indicePartido][0] = promedioSensibilidad(equipoMejor, T, colley, partidos);
-				promedios[indicePartido][1] = promedioSensibilidad(equipoInter, T, colley, partidos);
-				promedios[indicePartido][2] = promedioSensibilidad(equipoPeor, T, colley, partidos);
-			}
-			else{
-				if(met == '1'){
-					Matrix matWP = wp(T, partidos, '0');
-					int equipoMejor = equipoEnPos(matWP, 1);
-					int equipoInter = equipoEnPos(matWP, T/2);
-					int equipoPeor = equipoEnPos(matWP, T);
-
-					promedios[indicePartido][0] = promedioSensibilidad(equipoMejor, T, wp, partidos);
-					promedios[indicePartido][1] = promedioSensibilidad(equipoInter, T, wp, partidos);
-					promedios[indicePartido][2] = promedioSensibilidad(equipoPeor, T, wp, partidos);
-				}
-				else{
-					if(met == '2'){
-						Matrix matNM = nuestro_metodo(T, partidos, '0');
-						int equipoMejor = equipoEnPos(matNM, 1);
-						int equipoInter = equipoEnPos(matNM, T/2);
-						int equipoPeor = equipoEnPos(matNM, T);
-
-						promedios[indicePartido][0] = promedioSensibilidad(equipoMejor, T, nuestro_metodo, partidos);
-						promedios[indicePartido][1] = promedioSensibilidad(equipoInter, T, nuestro_metodo, partidos);
-						promedios[indicePartido][2] = promedioSensibilidad(equipoPeor, T, nuestro_metodo, partidos);
-					}
-					else{
-						cout << "Metodo no valido" << endl;
-					}
-				}
+				cantidades[indicePartido] = calcular_ascenso(equipoPeor, T, colley, partidos);
+			} else if(met == '1'){
+				Matrix matwp = wp(T, partidos, '0');
+				int equipoPeor = equipoEnPos(matwp, T);
+				cantidades[indicePartido] = calcular_ascenso(equipoPeor, T, wp, partidos);
+			} else if(met == '2'){
+				Matrix matnm = nuestro_metodo(T, partidos, '2');
+				int equipoPeor = equipoEnPos(matnm, T);
+				cantidades[indicePartido] = calcular_ascenso(equipoPeor, T, nuestro_metodo, partidos);
+			} else{
+				cout << "Metodo no valido" << endl;
 			}
 			indicePartido++;
 		}
@@ -152,16 +107,13 @@ int main(int argc, char** argv) {
 		ofstream outputf(argv[3]);
 	    if (outputf.is_open()){
 			for(int i = 0; i < P; i++){
-				outputf << fixed << setprecision(15) << promedios[i][0] << " ";
-				outputf << fixed << setprecision(15) << promedios[i][1] << " ";
-				outputf << fixed << setprecision(15) << promedios[i][2] << "\n";
+				outputf << fixed << setprecision(15) << cantidades[i] << "\n";
 			}
 			cout << "Ranking generado con éxito." << endl;
 	    } else {
 		      cout << "No se pudo abrir el archivo de salida." << endl;
 		      exit(0);
 	    }
-
 	}
 	else {
 	  cout << "No se pudo abrir el archivo de entrada." << endl;

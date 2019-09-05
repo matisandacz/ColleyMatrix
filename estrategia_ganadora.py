@@ -2,8 +2,6 @@ import numpy as np
 import subprocess
 from shutil import copyfile
 
-
-
 def obtener_posicion(equipo, archivo_ranking):
 	ordenado = np.argsort(np.loadtxt(archivo_ranking))
 	posicion = len(ordenado)
@@ -28,7 +26,7 @@ def veces_necesarias_vencer_a_posicion(posicion_i, posicion_d, archivo_partidos)
 
 	archivo_partidos_modificado = "archivo_partidos_modificado.txt"
 
-	
+
 	# copiado de internet. copia un archivo
 	copyfile(archivo_partidos, archivo_partidos_modificado)
 
@@ -58,11 +56,10 @@ def veces_necesarias_vencer_a_posicion(posicion_i, posicion_d, archivo_partidos)
 
 		copyfile("temp2.out", archivo_partidos_modificado)
 
-
 		# generamos el archivo
 		subprocess.call("./main 0 " + archivo_partidos_modificado + " temp.out", shell=True)
 		enfrentamientos_necesarios +=1
-	
+
 	return enfrentamientos_necesarios
 
 
@@ -80,10 +77,10 @@ def generar_campo(archivo_partidos):
 		tira = ""
 		for y in xrange(1,6):
 			tira = tira + str(veces_necesarias_vencer_a_posicion(x,y,"Season1718PremierLeague.in")) + " "
-			print "Completado usando el equipo "  + str(x) + " contra el que este en " + str(y)  
+			print "Completado usando el equipo "  + str(x) + " contra el que este en " + str(y)
 		tira = tira + "\n"
 		f.write(tira)
-		f.close() 
+		f.close()
 
 
 generar_campo("Season1718PremierLeague.in")

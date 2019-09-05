@@ -1,15 +1,12 @@
 import matplotlib.pyplot as plt
 import csv
 
-
-
 def plotear_por_n_de_equipos():
 	x = []
 	y = []
 	y2 = []
 	y3 = []
-	y4 = []	
-	
+	y4 = []
 
 	with open('datos/densidad/errores_en_base_a_n_equipo0.1.txt','r') as csvfile:
 	    plots = csv.reader(csvfile, delimiter='\n')
@@ -17,7 +14,7 @@ def plotear_por_n_de_equipos():
 	    for row in plots:
 	        x.append(n)
 	        y.append(float(row[0]))
-	        n += 1.0	
+	        n += 1.0
 
 	with open('datos/densidad/errores_en_base_a_n_equipo0.4.txt','r') as csvfile:
 	    plots = csv.reader(csvfile, delimiter='\n')
@@ -32,16 +29,15 @@ def plotear_por_n_de_equipos():
 	    n = 10.0
 	    for row in plots:
 	        y3.append(float(row[0]))
-	        n += 1.0	
-	
+	        n += 1.0
+
 
 	with open('datos/densidad/errores_en_base_a_n_equipo0.85.txt','r') as csvfile:
 	    plots = csv.reader(csvfile, delimiter='\n')
 	    n = 10.0
 	    for row in plots:
 	        y4.append(float(row[0]))
-	        n += 1.0	
-	
+	        n += 1.0
 
 	plt.plot(x, y, x, y2 , x ,y3, x, y4)
 	plt.gca().legend(('0.1','0.4','0.65','0.85') ,title="densidad")
@@ -50,7 +46,6 @@ def plotear_por_n_de_equipos():
 	plt.grid()
 	plt.title("Efecto del numero de equipos en el error en b")
 	plt.show()
-
 
 def plotear_por_densidad():
 	x = []
@@ -80,9 +75,6 @@ def plotear_por_densidad():
 	plt.grid()
 	plt.title("Efecto de la densidad en el error en b")
 	plt.show()
-
-
-
 
 plotear_por_densidad()
 plotear_por_n_de_equipos()

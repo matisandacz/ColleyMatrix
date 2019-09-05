@@ -2,6 +2,8 @@
 #include <fstream>
 #include <iomanip>
 
+#define epsilon 0.000001
+
 Matrix::Matrix() : _filas(0), _columnas(0), _arreglo(NULL) {
 }
 
@@ -165,13 +167,13 @@ void triangular(Matrix &A, Matrix &b,bool save_aii) {
 		{
 			// se busca otro pivote que tenga la columna i no nula
 			int posible_pivote = pivote + 1;
-			while(posible_pivote < A.filas() and A(posible_pivote,pivote) == 0) {
+			while(posible_pivote < A.filas() and A(posible_pivote,pivote) < epsilon && A(posible_pivote,pivote) > -epsilon) {
 				++posible_pivote;
 			}
 			// si se encontro alguno, se swapean
 			if (posible_pivote < A.filas())
 			{
-				;//A(pivote).swapear(A(posible_pivote));
+				A(pivote).swapear(A(posible_pivote));
 			}
 			// si no, entonces esta columna ya esta triangulada porque son todos 0.
 			else continue;

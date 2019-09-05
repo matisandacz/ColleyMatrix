@@ -9,8 +9,6 @@ from random import shuffle
 
 import numpy as np
 
-
-
 archivo = str(sys.argv[1])
 f = open(archivo, "r")
 rankings = []
