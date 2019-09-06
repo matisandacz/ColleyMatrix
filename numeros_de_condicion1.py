@@ -1,5 +1,6 @@
 import numpy as np
 import subprocess
+import matplotlib.pyplot as plt
 
 
 def obtener_colley(archivo_partidos):
@@ -43,7 +44,7 @@ def obtener_numero_de_condicion_1(numero_de_equipos, densidad):
 
 
 def guardar_campo():
-	f = open("condicion/campo_de_condiciones.txt", "w")
+	f = open("campo_de_condiciones.txt", "w")
 	f.close()
 
 	densidad = 0.1
@@ -52,7 +53,7 @@ def guardar_campo():
 	N_DE_EQUIPOS_FINAL = 100
 
 	for y in xrange(10):
-		f = open("condicion/campo_de_condiciones.txt", "a")
+		f = open("campo_de_condiciones.txt", "a")
 		string = ""
 		n = N_DE_EQUIPOS_INICIAL
 		while n <= N_DE_EQUIPOS_FINAL:
@@ -67,3 +68,27 @@ def guardar_campo():
 
 
 guardar_campo()
+
+a = np.loadtxt("campo_de_condiciones.txt")
+
+fig, ax = plt.subplots()
+heatmap = ax.pcolor(a, edgecolors='k', linewidths=1.0) # heatmap contient les valeurs
+
+ax.set_xticks(np.arange(10)+0.5, minor=False)
+ax.set_xticklabels(np.arange(10)*10 + 10  , minor=False)
+
+ax.set_yticks(np.arange(10)+0.5, minor=False)
+ax.set_yticklabels([0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0], minor=False)
+
+for i in xrange(10):
+    for j in xrange(10):
+        text = ax.text(j + 0.5, i + 0.5, int(a[i, j]),  ha="center", va="center", color="w")
+
+
+plt.colorbar(heatmap)
+
+plt.title('k1 maximo para distintas densidades y numero de equipos')
+plt.xlabel('n de equipos')
+plt.ylabel('densidad')
+
+plt.show()
