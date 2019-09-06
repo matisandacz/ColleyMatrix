@@ -1,8 +1,5 @@
 # ColleyMatrix
 
-Informe:
-https://www.overleaf.com/7834423656cndvmcqyqfrq
-
 La sección principal de la implementación, que calcula los rankings con cualquier método se puede ejecutar con:
 
 ./main COD archivo1 archivo2 arg
