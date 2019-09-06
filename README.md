@@ -37,3 +37,9 @@ medir_error.py se puede ejecutar sin parámetros para generar los datos necesari
 justicia.py fue utilizado para generar las posiciones en la tabla de cada uno de los equipos de la competencia. Toma un único parametro que es el archivo de texto en donde se almacenan los rankings generados por alguno de los algoritmos.
 
 python justicia.py ARCHIVO_RANKINGS
+
+estrategia_ganar.py fue utilizado para generar los graficos de victorias necesarias para cada conpetencia. Toma como parametro la competencia.
+
+python estrategia_ganar.py ARCHIVO_COMPETENCIA
+
+numeros_de_condicion1.py fue utilizado para generar el campo del numero de condicion 1. No toma parametros. Requiere de generador_competencia.py
